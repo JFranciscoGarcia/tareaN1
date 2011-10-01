@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 26-09-2011 08:23:21 PM by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="entidades.Habitacion" table="habitacion" catalog="hospital">
+        <id name="idHabitacion" type="java.lang.Long">
+            <column name="idHabitacion" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="hospital" class="entidades.Hospital" fetch="select">
+            <column name="hospitalId" not-null="true" />
+        </many-to-one>
+        <set name="hojaClinicas" inverse="true">
+            <key>
+                <column name="habitacionId" not-null="true" />
+            </key>
+            <one-to-many class="entidades.HojaClinica" />
+        </set>
+    </class>
+</hibernate-mapping>
