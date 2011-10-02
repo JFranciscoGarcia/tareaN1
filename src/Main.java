@@ -18,6 +18,9 @@ public class Main {
 		
 		
 		try{
+		
+		System.out.println("Comienzo");	
+			
 		HojaClinicaService hojaClinicaService = new HojaClinicaService();
 		
 		MedicoDAO medicoDAO = new MedicoDAO();
@@ -30,7 +33,11 @@ public class Main {
 		Hospital hospital= hospitalDAO.get(new Long(1));
 		
 		//Creo una nueva hoja clinica
-		hojaClinicaService.nuevaHojaClinica(hospital, medico,new Date(),"enfermo","toy re bien!!!","reposo", true, false, new Date());
+		hojaClinicaService.nuevaHojaClinica(hospital, medico,new Date(),"enfermo de bien!","toy re bien!!!","reposo", true, false, new Date());
+		
+		System.out.println("Termino con exito");	
+		
+		
 		
 		}catch(Exception ex){
 			ex.printStackTrace();
