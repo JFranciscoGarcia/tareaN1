@@ -180,6 +180,11 @@ input[type="button"] {
     width: 100%;
 }
 
+
+.msj-campo-error{
+	color: red;
+}
+
 .tabla-formulario{
 	margin-top:10px;
 	margin-left: auto;

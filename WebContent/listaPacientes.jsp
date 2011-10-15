@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="entidades.HojaClinica" %>
 <%@ page import="entidades.Especialidad" %>
+<%@ page import="entidades.Medico" %>
 <%@ page import="util.Constantes" %>
 <%@ page import="java.util.*" %>
 
@@ -44,7 +45,7 @@
 	    			modal: true,
 	    			position: 'center',
 	    			resizable: false,
-	    			height:250,
+	    			height:300,
 	    			width:450}		
 	    
 	    );
@@ -56,7 +57,7 @@
 	    			modal: true,
 	    			position: 'center',
 	    			resizable: false,
-	    			height:150,
+	    			height:200,
 	    			width:450}		
 	    
 	    );
@@ -72,7 +73,15 @@
 	    			width:450}		
 	    
 	    );
+	  
+	  comprobarErrores();
   });
+  
+  <% 
+  List<HojaClinica> listaHojasClinicas= (List<HojaClinica>)request.getSession().getAttribute("listaHojasClinicas");
+  List<Especialidad> listaEpecialidades=(List<Especialidad>)request.getSession().getAttribute("listaEspecialidades");
+  Medico medico=(Medico)request.getSession().getAttribute("medico");
+  %>
   
   
   function darAlta(idHojaClinica){
@@ -90,13 +99,35 @@
 		$('#dialogoMedico').dialog('open');
 	}
   
+  function comprobarErrores(){
+	  errores_diagnostico=<%=(Boolean)request.getAttribute("errores_diagnostico")%>;
+	  
+	  if(errores_diagnostico){
+	 	 idHojaClinica=<%=request.getAttribute("idHojaClinica")%>;
+	 	$('#idHojaClinica_diagnostico').val(idHojaClinica);
+		$('#dialogoDiagnostico').dialog('open');
+	  }
+  }
+  
+  function cargarMedicoEspecialista(idEspecialidad){
+	
+	  //especialidad 1 Cardiolgia
+	  if(idEspecialidad==1 ){
+		  $('#medicos_especialistas').append('<option value="1" selected="selected">Dr. Gregory House</option>');
+	  }
+	  
+	  //especialidad 2 Endocrinologia
+	  if(idEspecialidad==2 ){
+		  $('#medicos_especialistas').append('<option value="2" selected="selected">Dr. Nick Riviera</option>');
+		  $('#medicos_especialistas').append('<option value="3" selected="selected">Dr. Fox Mulder</option>');
+	  }
+
+  }
+  
   </script>
 </head>
 
-<% 
-List<HojaClinica> listaHojasClinicas= (List<HojaClinica>)request.getAttribute("listaHojasClinicas");
-List<Especialidad> listaEpecialidades=(List<Especialidad>)request.getAttribute("listaEspecialidades");
-%>
+
 <body>
 
 <div id="dialogoDarAlta" title="Dar Alta al paciente" style="display: none;">
@@ -117,18 +148,36 @@ List<Especialidad> listaEpecialidades=(List<Especialidad>)request.getAttribute("
 	<form action="/tareaN1/HojaClinicaServlet" method="post">
 		<table class="formulario">
 			<tr>
-				<th>Diagnostico:</th>
-				<td><textarea id="diagnostico" name="diagnostico"></textarea></td>
+				<th>(*) Diagnostico:</th>
+				<td>
+					<textarea id="diagnostico" name="diagnostico"></textarea>
+					<% if(request.getAttribute("error-diagnostico")!=null){%>
+								<br/><span class="msj-campo-error"><%=request.getAttribute("error-diagnostico")%></span>
+					<%}%>
+				</td>
 			</tr>
 			<tr>
-				<th>Tratamiento:</th>
-				<td><textarea id="tratamiento" name="tratamiento"></textarea></td>
+				<th>(*) Tratamiento:</th>
+				<td>
+					<textarea id="tratamiento" name="tratamiento"></textarea>
+					<% if(request.getAttribute("error-tratamiento")!=null){%>
+								<br/><span class="msj-campo-error"><%=request.getAttribute("error-tratamiento")%></span>
+					<%}%>
+				</td>
 			</tr>
 			<tr>
-				<th>Ingresar paciente (encamar):</th>
-				<td><input type="checkbox" id="encamar" name="encamar" value="true"/></td>
+				<th>(*) Ingresar paciente (encamar):</th>
+				<td>
+					<input type="checkbox" name="encamar" value="true"/>Si
+					<input type="checkbox" name="encamar" value="false"/>No
+					
+					<% if(request.getAttribute("error-encamar")!=null){%>
+						<br/><span class="msj-campo-error"><%=request.getAttribute("error-encamar")%></span>
+					<%}%>
+				</td>
 			</tr>
 		</table>
+		<p>(*) Campos obligatorios</p>
 		<div class="botonera">
 			<input type="hidden" value="" name="idHojaClinica" id="idHojaClinica_diagnostico"/>
 			<input type="submit"  name="accion" id="submitDirectorio" value="<%=Constantes.BTN_INGRESAR_DIAGNOSTICO%>"/>
@@ -138,12 +187,12 @@ List<Especialidad> listaEpecialidades=(List<Especialidad>)request.getAttribute("
 </div>
 
 <div id="dialogoMedico" title="Asignar Medico" style="display: none;">
-	<form action="/tareaN1/ListaPacientesServlet" method="post">
+	<form action="/tareaN1/HojaClinicaServlet" method="post">
 		<table>
 			<tr>
 				<th>Especialidad:</th>
 				<td>
-					<select>
+					<select id="comboEspecialidades" onchange="cargarMedicoEspecialista($('#comboEspecialidades').val());">
 					<%for(Especialidad especialidad: listaEpecialidades){%>
 						<option value="<%=especialidad.getIdEspecialidad()%>"><%=especialidad.getNombre()%></option>
 					<%} %>
@@ -151,15 +200,15 @@ List<Especialidad> listaEpecialidades=(List<Especialidad>)request.getAttribute("
 				</td>
 			</tr>
 			<tr>
-				<th>Medico:</th>
+				<th>(*) Medico:</th>
 				<td>
-					<select>
-						<option>Doc</option>
-						<option>Doc</option>
+					<select id="medicos_especialistas" name="medico_especialista">
+
 					</select>
 				</td>
 			</tr>
 		</table>
+		<p>(*) Campos obligatorios</p>
 		<div class="botonera">
 			<input type="hidden" value="" name="idHojaClinica" id="idHojaClinica_medico"/>
 			<input type="submit"  name="accion" id="submitDirectorio" value="<%=Constantes.BTN_ASIGNAR_MEDICO%>"/>
@@ -194,15 +243,18 @@ List<Especialidad> listaEpecialidades=(List<Especialidad>)request.getAttribute("
             	<h1>Indicaciones de uso</h1>
             	Existen dos usuarios de prueba en la DB, cuyos n&uacute;meros de seguros y nombre son:
             	<ul>
-            		<li>789 - Dr. Gregory House</li>
-            		<li>852 - Dr. Nick Riviera</li>
+            		<li>789 - Dr. Gregory House - Cardiolog&iacute;a</li>
+            		<li>852 - Dr. Nick Riviera - Endocrinolog&iacute;a</li>
+            		<li>741	- Dr. Fox Mulder - Endocrinolog&iacute;a</li>
             	</ul>
          	</div>
         </div>
          
         <div id="mainContent">
-        	<h1>Lista de Pacientes</h1>
-            <p>Ingrese el n&uacute;mero de colegiado del M&eacute;dico para ver la lista de pacientes asignados.</p>
+        	<h1>Lista de Pacientes - <%=medico.getNombre()%></h1>
+            <% if(request.getAttribute("error")!=null){%>
+			<div class="msj-error"><%=request.getAttribute("error")%></div>
+			<%}%>
            
 			<table class="tabla-datos">
 				<tr>
@@ -221,7 +273,7 @@ List<Especialidad> listaEpecialidades=(List<Especialidad>)request.getAttribute("
 					<td><%=hojaClinica.getAsegurado().getNombre()%></td>
 					<td><%=hojaClinica.getSintomas()%></td>
 					<% if(hojaClinica.getAlta()!=null){ %>
-					<td><%= (hojaClinica.getAlta()==true)?"SI":"NO" %></td>
+					<td><%= (hojaClinica.getAlta()==true)?FechaUtil.formatearAFechaClinicaAlta(hojaClinica.getFechaAlta()):"NO" %></td>
 					<%}else{ %>
 					<td>-</td>
 					<%}%>

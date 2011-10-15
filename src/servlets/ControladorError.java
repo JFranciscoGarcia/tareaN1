@@ -52,7 +52,7 @@ public class ControladorError extends HttpServlet {
 		out.write("<!doctype html public \"-//w3c//dtd html 4.0 transitional//en\">");
 		out.write("<html>");
 		out.write("<head>");
-		out.write("<title>Error</title>");
+		out.write("<title>Error yyhry</title>");
 		out.write("</head>");
 		out.write("<body>");
 

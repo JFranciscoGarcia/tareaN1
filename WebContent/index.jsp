@@ -1,8 +1,10 @@
 <%@page import="util.Constantes"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
     
  <% 
 	String hojaClinicaCreada= (request.getAttribute("hojaClinicaCreada")==null)?"":(String)request.getAttribute("hojaClinicaCreada");
+	String nombreMedicoAsignado= (request.getAttribute("nombreMedicoAsignado")==null)?null:(String)request.getAttribute("nombreMedicoAsignado");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -62,28 +64,40 @@
             <% if(hojaClinicaCreada.equals("ok")){ %>
  
 			<div class="msj-exito">
-				<p>Se ha creado una nueva hoja clinica exitosamente</p>
+				<p>Se ha creado una nueva hoja clinica exitosamente para <br/><b><%=nombreMedicoAsignado%></b></p>
 			</div>
 		
 			<%}else{%>
 			<h1>Modo recepci&oacute;n</h1>
             <p>Ingrese el n&uacute;mero de asegurado y los s&iacute;ntomas que presenta.</p>
+             <% if(request.getAttribute("error")!=null){%>
+			<div class="msj-error"><%=request.getAttribute("error")%></div>
+			<%}%>
 			<form action="/tareaN1/HojaClinicaServlet" method="post">
 				<table class="tabla-formulario">
 					<tr>
-						<th>N&uacute;mero de seguro:</th>
+						<th>(*) N&uacute;mero de seguro:</th>
 						<td>
 							<input type="text" name="numSeguro" id="numSeguro" value=""/>
+							
+							 <% if(request.getAttribute("error-numseguro")!=null){%>
+								<br/><span class="msj-campo-error"><%=request.getAttribute("error-numseguro")%></span>
+							<%}%>
+						
 						</td>
 					</tr>
 					<tr>
-						<th>Sintomas:</th>
+						<th>(*) Sintomas:</th>
 						<td>
 							<textarea rows="5" cols="20" name="sintomas" id="sintomas"></textarea>
+							 <% if(request.getAttribute("error-sintomas")!=null){%>
+								<br/><span class="msj-campo-error"><%=request.getAttribute("error-sintomas")%></span>
+							<%}%>
 						</td>
 					</tr>
 					 
 				</table>
+				<p>(*) Campos obligatorios</p>
 				<div class="botonera">
 					<input type="submit" name="accion" value="<%=Constantes.BTN_NUEVA_HOJA %>" /> 
 				</div>

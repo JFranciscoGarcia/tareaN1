@@ -15,6 +15,8 @@ import servicios.MedicoService;
 import util.Constantes;
 import util.Dispatcher;
 import util.HojaClinicaComparator;
+import util.inputTextUtil;
+import dao.DAO;
 import dao.EspecialidadDAO;
 import entidades.HojaClinica;
 import entidades.Medico;
@@ -47,45 +49,56 @@ public class ConsultaServlet extends HttpServlet {
 	}
 
 	private void consultarPacientes(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		Integer numColegiado = null;
-
+		String numColegiadoStr = null;
+		boolean error=false;
+		
 		String accion= (String)request.getParameter("accion");
 		
 		if(accion!=null && accion.equals(Constantes.BTN_CONSULTAR)){
+			numColegiadoStr=  inputTextUtil.limpiar(request.getParameter("numColegiado"));
 			
-			if( request.getParameter("numColegiado")==null || ((String)request.getParameter("numColegiado")).isEmpty() ){
-				request.setAttribute("error", Constantes.MSJ_DEBE_INGRESAR_NUM_COLEGIADO);
-				Dispatcher.ir(getServletContext(), request, response,"/consulta.jsp");
-				return;
+			if(inputTextUtil.estaVacio(numColegiadoStr)){
+				request.setAttribute("error-numcolegiado", Constantes.MSJ_DEBE_INGRESAR_NUM_COLEGIADO);
+				error=true;
 			}
 			
-			numColegiado = Integer.parseInt((String) request.getParameter("numColegiado"));
+			if(!inputTextUtil.estaVacio(numColegiadoStr)){
+				if(!inputTextUtil.esNumero(numColegiadoStr)){
+					request.setAttribute("error-numcolegiado", Constantes.MSJ_NO_ES_NUMERO);
+					error=true;
+				}
+			}
+			
 			
 		}else{
-			numColegiado= (Integer)request.getSession().getAttribute("numColegiado");
-		}
-		
 
-		if (numColegiado == null) {
-			Dispatcher.ir(getServletContext(), request, response,"/index.jsp");
+			numColegiadoStr= (String)request.getSession().getAttribute("numColegiado");
+		}
+
+		if(error){
+			Dispatcher.ir(getServletContext(), request, response,"/consulta.jsp");
 			return;
 		}
-
+		
+		DAO.getSession().flush();
+		DAO.getSession().clear();
+		int numColegiado = Integer.parseInt(numColegiadoStr);
 		Medico medico = medicoService.traerMedicoPorNumColegiado(numColegiado);
+	
 
 		if (medico == null) {
-			request.setAttribute("error", "No existe medico para el numero de colegiado");
+			request.setAttribute("error", Constantes.EXCEPCION_MEDICO_NO_ENCONTRADO);
 			Dispatcher.ir(getServletContext(), request, response,"/consulta.jsp");
 		} else {
-			request.getSession().setAttribute("numColegiado",medico.getNum());
-
+			
 			List<HojaClinica> listaHojasClinicas = new ArrayList<HojaClinica>(medico.getHojaClinicas());
-
-
 			Collections.sort(listaHojasClinicas,new HojaClinicaComparator());
 
-			request.setAttribute("listaHojasClinicas", listaHojasClinicas);
-			request.setAttribute("listaEspecialidades",especialidadDAO.list());
+			request.getSession().setAttribute("listaHojasClinicas", listaHojasClinicas);
+			request.getSession().setAttribute("listaEspecialidades",especialidadDAO.list());
+			request.getSession().setAttribute("numColegiado",medico.getNum()+"");
+			request.getSession().setAttribute("medico",medico);
+			
 
 			Dispatcher.ir(getServletContext(), request, response,"/listaPacientes.jsp");
 		}

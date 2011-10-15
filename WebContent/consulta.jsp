@@ -1,5 +1,9 @@
 <%@page import="util.Constantes"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -40,7 +44,12 @@
         </div>
        
     </div>
-
+    
+    <c:if test="${1==1}">
+    
+    hola
+    </c:if>
+    
     <div class="allContent">
         
         <div id="tip">
@@ -48,15 +57,16 @@
             	<h1>Indicaciones de uso</h1>
             	Existen dos usuarios de prueba en la DB, cuyos n&uacute;meros de seguros y nombre son:
             	<ul>
-            		<li>789 - Dr. Gregory House</li>
-            		<li>852 - Dr. Nick Riviera</li>
+            		<li>789 - Dr. Gregory House - Cardiolog&iacute;a</li>
+            		<li>852 - Dr. Nick Riviera - Endocrinolog&iacute;a</li>
+            		<li>741	- Dr. Fox Mulder - Endocrinolog&iacute;a</li>
             	</ul>
          	</div>
         </div>
          
         <div id="mainContent">
         	<h1>Modo consulta</h1>
-        	<p>Ingresr el n&uacute;mero de colegiado para acceder a la lista de pacientes asignados.</p>
+        	<p>Ingresar el n&uacute;mero de colegiado para acceder a la lista de pacientes asignados.</p>
         	            
            <% if(request.getAttribute("error")!=null){%>
 			<div class="msj-error"><%=request.getAttribute("error")%></div>
@@ -65,13 +75,19 @@
 			<form action="/tareaN1/ConsultaServlet" method="post">
 				<table class="tabla-formulario">
 					<tr>
-						<th>N&uacute;mero de colegiado: </th>
-						<td><input type="text"  name="numColegiado" id="numColegiado"/></td>
+						<th>(*) N&uacute;mero de colegiado: </th>
+						<td>
+							<input type="text"  name="numColegiado" id="numColegiado"/>
+							<% if(request.getAttribute("error-numcolegiado")!=null){%>
+								<br/><span class="msj-campo-error"><%=request.getAttribute("error-numcolegiado")%></span>
+							<%}%>
+						</td>
 					</tr>
 				</table>
 				<div class="botonera">
 					<input name="accion" type="submit" value="<%=Constantes.BTN_CONSULTAR%>"/> 
 				</div>
+				<p>(*) Campos obligatorios</p>
 			</form>
         </div>
         <!-- end #mainContent -->

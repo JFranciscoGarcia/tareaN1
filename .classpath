@@ -19,5 +19,7 @@
 	<classpathentry kind="lib" path="Lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="Lib/jaxp-api.jar"/>
 	<classpathentry kind="lib" path="Lib/jdbc2_0-stdext.jar"/>
+	<classpathentry kind="lib" path="Lib/jstl.jar"/>
+	<classpathentry kind="lib" path="Lib/standard.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

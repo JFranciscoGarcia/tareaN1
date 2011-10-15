@@ -22,11 +22,13 @@ public class MedicoDAO extends DAO {
 
 	public Medico traer(Long idMedico) throws Exception {
 		try {
-			Medico medico = (Medico) getSession()
+			Medico medico = null;
+			begin();
+			medico=(Medico) getSession()
 					.createQuery(
 							"from Medico medico where medico.idMedico = :idMedico")
 					.setParameter("idMedico", idMedico).uniqueResult();
-
+			commit();
 			return medico;
 		} catch (Exception e) {
 			throw e;
@@ -35,11 +37,15 @@ public class MedicoDAO extends DAO {
 	
 	public Medico traerPorNumColegiado(Integer numColegiado) throws Exception {
 		try {
-			Medico medico = (Medico) getSession().createQuery(
+			Medico medico=null;
+			begin();
+			medico = (Medico) getSession().createQuery(
 							"from Medico medico where medico.num = :numColegiado")
 					.setParameter("numColegiado", numColegiado).uniqueResult();
 			
+			commit();
 			return medico;
+			
 		}catch (NoResultException ex){
 			return null;
 			
