@@ -1,0 +1,248 @@
+* {
+	margin:0;
+	padding:0;
+}
+body  {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#505a5d;
+	background: #FFF url(../images/templateBackground.jpg) repeat-x left top;
+}
+h1 {
+	color:#2f9dea;
+	font-size:14px;
+}
+h2 {
+	color:#2f9dea;
+	font-size:12px;
+}
+a {
+	color:#5caddc;
+	text-decoration:underline;
+}
+a:hover {
+	color:#5caddc;
+	text-decoration:underline;
+}
+#container { 
+	width: 980px;  
+	margin: 0 auto;
+	background:#ffffff;
+} 
+#header { 
+
+}
+.headerTop {
+height:100px;
+}
+.logo {
+	float:left;
+	color:#00b0e4;
+	font-size:48px;
+	padding:10px 0 0 20px;
+}
+.logo span {
+	font-size:18px;
+	color:#9aa0ab;
+}
+.logo img {
+	border:0;
+}
+.search {
+	margin-left:700px;
+	padding:35px 20px 0 0;
+}
+.search input {
+	height:24px;
+}
+.si {
+	float:left;
+	padding-top:10px;
+}
+.search img {
+	border:0;
+	padding-top:10px;
+}
+.mainMenu {
+	margin-top:10px;
+	background:url(../images/menuBackground.jpg) repeat-x left top;
+	height:54px;
+	text-align:center;
+}
+.mainMenu ul {
+	margin:0;
+	padding:13px 0 0 0;
+}
+.mainMenu li {
+	list-style:none;
+	display:inline;
+	padding:60px;
+}
+.mainMenu a {
+	font-size:18px;
+	color:#ffffff;
+	text-decoration:none;
+}
+.mainMenu a:hover {
+	font-size:18px;
+	color:#085f75;
+	text-decoration:none;
+}
+.mainMenu #active  a {
+	font-size:18px;
+	color:#085f75;
+	text-decoration:none;
+}
+.headerPic {
+	/*background:url(../images/headerBackground.jpg) no-repeat left top;*/
+	height:317px;
+	margin-bottom:23px;
+}
+.allContent {
+	margin:0 20px;
+}
+#tip {
+	background:url(../images/tip.jpg) no-repeat left top;
+	float: left; 
+	width: 300px; 
+	height:300px;
+
+}
+
+#tip .tip-content{
+	font-family: Comic Sans MS;
+	color:#595454;
+	margin-left: 35px;
+	margin-top: 80px;
+	margin-right: 40px;
+}
+
+.tip-content h1{
+	font-size:14px;
+	color:black;
+}
+
+input[type="submit"] {
+	border:1px solid #b0b8c7;
+	padding: 5px 20px 5px 20px;
+}
+input[type="button"] {
+	border:1px solid #b0b8c7;
+	padding: 5px 20px 5px 20px;
+}
+
+
+.botonera{
+	width: 350px;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 10px;
+	text-align: center;
+}
+
+.botonera input{
+	display: inline;
+ 	width: 150px;
+}
+
+.loginFooter {
+	
+	/*background:url(../images/tipBottom.png) no-repeat left top;
+	height:96px;
+	width:300px;*/
+}
+
+.msj-exito {
+    background-color: #6AFB92;
+    border-color: #347C17;
+    border-style: solid;
+    border-width: thin;
+    color: BLAck;
+    font-weight: bold;
+    line-height: 150%;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.msj-error{
+    background-color: #F6CECE;
+    border-color: #DF3A01;
+    border-style: solid;
+    border-width: thin;
+    color: BLAck;
+    font-weight: bold;
+    line-height: 150%;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.tabla-formulario{
+	margin-top:10px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.tabla-datos{
+	margin-top:10px;
+	border-collapse:collapse;
+}
+
+.tabla-datos th, .tabla-datos td{
+	
+	margin-left: auto;
+	margin-right: auto;
+	border-color: #A9D0F5;
+	border-style: solid;
+	border-width: thin;
+	text-align: center;
+
+}
+.tabla-datos th{
+	height:20px;
+	background-color:#E0F2F7;
+	color:#045FB4;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.tabla-datos tr:HOVER{
+	background-color:#E0F2F7;
+}
+
+.acciones{
+	cursor: pointer;
+	padding-left: 0px;
+	padding-right: 0px;
+	width: 100px;
+	
+}
+
+.acciones a:HOVER{
+	color: #0B0B61;
+}
+
+
+
+
+#mainContent { 
+	height:auto;
+	margin: 0 0 0 269px;
+	padding:20px 20px;
+} 
+#footer {
+	height:50px;
+	text-align:center;
+	padding-top:30px;
+	background:url(../images/footer.jpg) repeat-x left top;
+	margin-top:20px;
+} 
+.clearfloat { /* this class should be placed on a div or break element and should be the final element before the close of a container that should fully contain a float */
+	clear:both;
+    height:0;
+    font-size: 1px;
+    line-height: 0px;
+}
