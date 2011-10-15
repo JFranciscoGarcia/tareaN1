@@ -1,12 +1,9 @@
 import java.util.Date;
 
-import dao.HospitalDAO;
-import dao.MedicoDAO;
-import entidades.Hospital;
-import entidades.Medico;
-
-import servicios.HojaClinicaService;
-import servicios.MedicoService;
+import dao.AseguradoDAO;
+import dao.HojaClinicaDAO;
+import entidades.Asegurado;
+import entidades.HojaClinica;
 
 
 
@@ -21,19 +18,19 @@ public class Main {
 		
 		System.out.println("Comienzo");	
 			
-		HojaClinicaService hojaClinicaService = new HojaClinicaService();
 		
-		MedicoDAO medicoDAO = new MedicoDAO();
-		HospitalDAO hospitalDAO= new HospitalDAO();
+		AseguradoDAO aseguradoDAO = new AseguradoDAO();
+		HojaClinicaDAO hojaClinicaDAO = new HojaClinicaDAO();
 		
+		Asegurado asegurado = aseguradoDAO.traerPorNumeroAsegurado(new Long(1));
+
+	
+		HojaClinica nuevaHojaClinica = new HojaClinica();
+		nuevaHojaClinica.setFechaIngreso(new Date());
+		nuevaHojaClinica.setSintomas("ahhaha");
+		nuevaHojaClinica.setAsegurado(asegurado);
 		
-		//Busco a un medico 
-		Medico medico= medicoDAO.get(new Long(1));
-		//Busco un hospital
-		Hospital hospital= hospitalDAO.get(new Long(1));
-		
-		//Creo una nueva hoja clinica
-		hojaClinicaService.nuevaHojaClinica(hospital, medico,new Date(),"enfermo de bien!","toy re bien!!!","reposo", true, false, new Date());
+		hojaClinicaDAO.insertar(nuevaHojaClinica);
 		
 		System.out.println("Termino con exito");	
 		

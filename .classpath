@@ -8,16 +8,16 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="src/conf"/>
 	<classpathentry kind="lib" path="Lib/antlr-2.7.6.jar"/>
 	<classpathentry kind="lib" path="Lib/commons-collections-3.1.jar"/>
-	<classpathentry kind="lib" path="Lib/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="Lib/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
 	<classpathentry kind="lib" path="Lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="Lib/javassist-3.12.0.GA.jar"/>
 	<classpathentry kind="lib" path="Lib/jta-1.1.jar"/>
 	<classpathentry kind="lib" path="Lib/mysql-connector-java-5.1.17-bin.jar"/>
-	<classpathentry kind="lib" path="Lib/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="Lib/slf4j-jdk14-1.6.2.jar"/>
+	<classpathentry kind="lib" path="Lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="Lib/jaxp-api.jar"/>
+	<classpathentry kind="lib" path="Lib/jdbc2_0-stdext.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

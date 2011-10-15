@@ -1,5 +1,5 @@
 package entidades;
-// Generated 26-09-2011 08:23:21 PM by Hibernate Tools 3.2.1.GA
+// Generated 14-10-2011 10:27:12 PM by Hibernate Tools 3.2.1.GA
 
 
 import java.util.HashSet;
@@ -12,18 +12,12 @@ public class Habitacion  implements java.io.Serializable {
 
 
      private Long idHabitacion;
-     private Hospital hospital;
      private Set hojaClinicas = new HashSet(0);
 
     public Habitacion() {
     }
 
-	
-    public Habitacion(Hospital hospital) {
-        this.hospital = hospital;
-    }
-    public Habitacion(Hospital hospital, Set hojaClinicas) {
-       this.hospital = hospital;
+    public Habitacion(Set hojaClinicas) {
        this.hojaClinicas = hojaClinicas;
     }
    
@@ -33,13 +27,6 @@ public class Habitacion  implements java.io.Serializable {
     
     public void setIdHabitacion(Long idHabitacion) {
         this.idHabitacion = idHabitacion;
-    }
-    public Hospital getHospital() {
-        return this.hospital;
-    }
-    
-    public void setHospital(Hospital hospital) {
-        this.hospital = hospital;
     }
     public Set getHojaClinicas() {
         return this.hojaClinicas;

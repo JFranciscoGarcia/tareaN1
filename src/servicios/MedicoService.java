@@ -1,26 +1,18 @@
 package servicios;
 
-import java.util.List;
-
 import dao.MedicoDAO;
 import entidades.Medico;
 
-public class MedicoService  {
+public class MedicoService {
 
 	MedicoDAO medicoDao;
 
-	public List<Medico> traerATodosLosGiles() {
-		try{
-			//return medicoDao.list();
-			
-			MedicoDAO a = new MedicoDAO ();
-			return a.list();
+	public Medico traerMedicoPorNumColegiado(Integer numeroColegiado)
+			throws Exception {
 		
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
-		return null;
+		MedicoDAO medicoDao = new MedicoDAO();
+		Medico medico = medicoDao.traerPorNumColegiado(numeroColegiado);
+
+		return medico;
 	}
-	
-	
 }

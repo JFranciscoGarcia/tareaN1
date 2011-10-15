@@ -8,12 +8,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 public class DAO {
-	
+
 	@SuppressWarnings("unused")
-	private static final Logger log = Logger.getAnonymousLogger();	
+	private static final Logger log = Logger.getAnonymousLogger();
 	private static final ThreadLocal session = new ThreadLocal();
-	private static final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-	
+	private static final SessionFactory sessionFactory = new Configuration()
+			.configure().buildSessionFactory();
+
 	protected DAO() {
 	}
 

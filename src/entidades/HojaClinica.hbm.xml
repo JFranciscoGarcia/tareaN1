@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 26-09-2011 08:23:21 PM by Hibernate Tools 3.2.1.GA -->
+<!-- Generated 14-10-2011 10:27:12 PM by Hibernate Tools 3.2.1.GA -->
 <hibernate-mapping>
     <class name="entidades.HojaClinica" table="hojaClinica" catalog="hospital">
         <id name="idHojaClinica" type="java.lang.Long">
@@ -9,22 +9,22 @@
             <generator class="identity" />
         </id>
         <many-to-one name="habitacion" class="entidades.Habitacion" fetch="select">
-            <column name="habitacionId" not-null="false" />
+            <column name="habitacionId" />
         </many-to-one>
         <many-to-one name="medico" class="entidades.Medico" fetch="select">
-            <column name="medicoId" not-null="true" />
+            <column name="medicoId" />
         </many-to-one>
-        <many-to-one name="hospital" class="entidades.Hospital" fetch="select">
-            <column name="hospitalId" not-null="true" />
+        <many-to-one name="asegurado" class="entidades.Asegurado" fetch="select">
+            <column name="aseguradoId" not-null="true" />
         </many-to-one>
-        <property name="num" type="int">
-            <column name="num" not-null="true" />
+        <property name="num" type="java.lang.Integer">
+            <column name="num" />
         </property>
-        <property name="fechaIngreso" type="date">
-            <column name="fechaIngreso" length="10" not-null="true" />
+        <property name="fechaIngreso" type="timestamp">
+            <column name="fechaIngreso" length="19" not-null="true" />
         </property>
         <property name="sintomas" type="string">
-            <column name="sintomas" length="4000" />
+            <column name="sintomas" length="4000" not-null="true" />
         </property>
         <property name="diagnostico" type="string">
             <column name="diagnostico" length="4000" />
@@ -32,20 +32,14 @@
         <property name="tratamiento" type="string">
             <column name="tratamiento" length="4000" />
         </property>
-        <property name="encamado" type="boolean">
-            <column name="encamado" not-null="true" />
+        <property name="encamado" type="java.lang.Boolean">
+            <column name="encamado" />
         </property>
-        <property name="alta" type="boolean">
-            <column name="alta" not-null="true" />
+        <property name="alta" type="java.lang.Boolean">
+            <column name="alta" />
         </property>
         <property name="fechaAlta" type="date">
-            <column name="fechaAlta" length="10" not-null="true" />
+            <column name="fechaAlta" length="10" />
         </property>
-        <set name="asegurados" inverse="true">
-            <key>
-                <column name="hojaClinicaId" not-null="true" />
-            </key>
-            <one-to-many class="entidades.Asegurado" />
-        </set>
     </class>
 </hibernate-mapping>
