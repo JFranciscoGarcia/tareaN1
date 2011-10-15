@@ -1,6 +1,7 @@
 <%@page import="util.FechaUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="entidades.HojaClinica" %>
+<%@ page import="entidades.Especialidad" %>
 <%@ page import="util.Constantes" %>
 <%@ page import="java.util.*" %>
 
@@ -94,6 +95,7 @@
 
 <% 
 List<HojaClinica> listaHojasClinicas= (List<HojaClinica>)request.getAttribute("listaHojasClinicas");
+List<Especialidad> listaEpecialidades=(List<Especialidad>)request.getAttribute("listaEspecialidades");
 %>
 <body>
 
@@ -142,8 +144,9 @@ List<HojaClinica> listaHojasClinicas= (List<HojaClinica>)request.getAttribute("l
 				<th>Especialidad:</th>
 				<td>
 					<select>
-						<option>alguna</option>
-						<option>alguna2</option>
+					<%for(Especialidad especialidad: listaEpecialidades){%>
+						<option value="<%=especialidad.getIdEspecialidad()%>"><%=especialidad.getNombre()%></option>
+					<%} %>
 					</select>
 				</td>
 			</tr>
@@ -191,8 +194,8 @@ List<HojaClinica> listaHojasClinicas= (List<HojaClinica>)request.getAttribute("l
             	<h1>Indicaciones de uso</h1>
             	Existen dos usuarios de prueba en la DB, cuyos n&uacute;meros de seguros y nombre son:
             	<ul>
-            		<li>123 - Francisco Garcia</li>
-            		<li>456 - Yerko Chapanoff</li>
+            		<li>789 - Dr. Gregory House</li>
+            		<li>852 - Dr. Nick Riviera</li>
             	</ul>
          	</div>
         </div>

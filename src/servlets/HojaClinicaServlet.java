@@ -99,10 +99,7 @@ public class HojaClinicaServlet extends HttpServlet {
 			Long numAsegurado = Long.parseLong(request.getParameter("numSeguro"));
 			String sintomas = (String) request.getParameter("sintomas");
 			Date fechaIngreso = new Date();
-	
-			System.out.println("ingreso: "+fechaIngreso);
-			
-			
+
 			hojaClinicaService.nuevaHojaClinica(numAsegurado, fechaIngreso,sintomas);
 	
 			request.setAttribute("hojaClinicaCreada", "ok");
