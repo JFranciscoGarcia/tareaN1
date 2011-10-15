@@ -21,10 +21,6 @@
 <![endif]-->
 </head>
 <body>
-<% 
-String strLoginCorrecto= (String)request.getAttribute("loginCorrecto");
-boolean loginCorrecto= (strLoginCorrecto == null)?true:Boolean.valueOf(strLoginCorrecto);
-%>
 
 <div id="container">
     <div id="header">
@@ -62,8 +58,8 @@ boolean loginCorrecto= (strLoginCorrecto == null)?true:Boolean.valueOf(strLoginC
         	<h1>Modo consulta</h1>
         	<p>Ingresr el n&uacute;mero de colegiado para acceder a la lista de pacientes asignados.</p>
         	            
-           <% if(!loginCorrecto){%>
-			<div class="msj-error">No se encotr&oacute; Dr. para el n&uacute;mero de colegiado ingresado.</div>
+           <% if(request.getAttribute("error")!=null){%>
+			<div class="msj-error"><%=request.getAttribute("error")%></div>
 			<%}%>
 			
 			<form action="/tareaN1/ConsultaServlet" method="post">

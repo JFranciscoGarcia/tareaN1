@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,13 +11,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.EspecialidadDAO;
-
 import servicios.MedicoService;
 import util.Constantes;
 import util.Dispatcher;
 import util.HojaClinicaComparator;
-import entidades.Especialidad;
+import dao.EspecialidadDAO;
 import entidades.HojaClinica;
 import entidades.Medico;
 
@@ -55,7 +52,15 @@ public class ConsultaServlet extends HttpServlet {
 		String accion= (String)request.getParameter("accion");
 		
 		if(accion!=null && accion.equals(Constantes.BTN_CONSULTAR)){
+			
+			if( request.getParameter("numColegiado")==null || ((String)request.getParameter("numColegiado")).isEmpty() ){
+				request.setAttribute("error", Constantes.MSJ_DEBE_INGRESAR_NUM_COLEGIADO);
+				Dispatcher.ir(getServletContext(), request, response,"/consulta.jsp");
+				return;
+			}
+			
 			numColegiado = Integer.parseInt((String) request.getParameter("numColegiado"));
+			
 		}else{
 			numColegiado= (Integer)request.getSession().getAttribute("numColegiado");
 		}
@@ -69,7 +74,7 @@ public class ConsultaServlet extends HttpServlet {
 		Medico medico = medicoService.traerMedicoPorNumColegiado(numColegiado);
 
 		if (medico == null) {
-			request.setAttribute("loginCorrecto", "false");
+			request.setAttribute("error", "No existe medico para el numero de colegiado");
 			Dispatcher.ir(getServletContext(), request, response,"/consulta.jsp");
 		} else {
 			request.getSession().setAttribute("numColegiado",medico.getNum());
