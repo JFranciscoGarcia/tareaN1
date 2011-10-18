@@ -6,34 +6,8 @@ import javax.persistence.NoResultException;
 
 import entidades.Medico;
 
-public class MedicoDAO extends DAO {
+public class MedicoDAO extends GenericDAO<Medico> {
 
-	public Medico crear(Medico medico) throws Exception {
-		try {
-			begin();
-			getSession().save(medico);
-			commit();
-			return medico;
-		} catch (Exception e) {
-			rollback();
-			throw e;
-		}
-	}
-
-	public Medico traer(Long idMedico) throws Exception {
-		try {
-			Medico medico = null;
-			begin();
-			medico=(Medico) getSession()
-					.createQuery(
-							"from Medico medico where medico.idMedico = :idMedico")
-					.setParameter("idMedico", idMedico).uniqueResult();
-			commit();
-			return medico;
-		} catch (Exception e) {
-			throw e;
-		}
-	}
 	
 	public Medico traerPorNumColegiado(Integer numColegiado) throws Exception {
 		try {
@@ -53,38 +27,25 @@ public class MedicoDAO extends DAO {
 			throw ex;
 		}
 	}
-
-	public void guardar(Medico medico) throws Exception {
-		try {
-			begin();
-			getSession().update(medico);
-			commit();
-		} catch (Exception e) {
-			rollback();
-			throw e;
-		}
-
-	}
-
-	public void eliminar(Medico medico) throws Exception {
-		try {
-			begin();
-			getSession().delete(medico);
-			commit();
-		} catch (Exception e) {
-			rollback();
-			throw e;
-		}
-	}
-
+	
 	@SuppressWarnings("unchecked")
-	public List<Medico> list() throws Exception {
+	public List<Medico> traerPorEspecialidad(Integer idEspecialidad) throws Exception {
 		try {
-			List<Medico> list = getSession().createQuery("from Medico").list();
-
-			return list;
-		} catch (Exception e) {
-			throw e;
+			List<Medico> listaMedicos=null;
+			begin();
+			listaMedicos = (List<Medico>) getSession().createQuery(
+							"from Medico medico where medico.especialidad.idEspecialidad = :idEspecialidad")
+					.setParameter("idEspecialidad", idEspecialidad).list();
+			
+			commit();
+			return listaMedicos;
+			
+		}catch (NoResultException ex){
+			return null;
+			
+		} catch (Exception ex) {
+			throw ex;
 		}
 	}
+
 }

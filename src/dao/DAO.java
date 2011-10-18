@@ -11,9 +11,9 @@ public class DAO {
 
 	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getAnonymousLogger();
+	@SuppressWarnings("rawtypes")
 	private static final ThreadLocal session = new ThreadLocal();
-	private static final SessionFactory sessionFactory = new Configuration()
-			.configure().buildSessionFactory();
+	private static final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 
 	protected DAO() {
 	}

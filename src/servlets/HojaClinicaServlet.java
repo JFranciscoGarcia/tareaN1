@@ -17,9 +17,6 @@ import util.Constantes;
 import util.Dispatcher;
 import util.inputTextUtil;
 
-/**
- * Servlet implementation class HojaClinica
- */
 @WebServlet("/HojaClinicaServlet")
 public class HojaClinicaServlet extends HttpServlet {
 
@@ -30,7 +27,6 @@ public class HojaClinicaServlet extends HttpServlet {
 	public HojaClinicaServlet() {
 
 	}
-
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -74,30 +70,28 @@ public class HojaClinicaServlet extends HttpServlet {
 			String idHojaClinicaStr=inputTextUtil.limpiar(request.getParameter("idHojaClinica"));
 			String idMedicoEspecialistaStr=inputTextUtil.limpiar(request.getParameter("medico_especialista"));
 			
-			try{
-				if(inputTextUtil.estaVacio(idHojaClinicaStr)){
-					request.setAttribute("error", Constantes.EXCEPCION_ID_HOJA_CLINICA_NO_ENCONTRADO);
-					throw new LogicaNegocioException(Constantes.EXCEPCION_ID_HOJA_CLINICA_NO_ENCONTRADO);
-				}
-				
-				if(inputTextUtil.estaVacio(idMedicoEspecialistaStr)){
-					request.setAttribute("error", Constantes.EXCEPCION_ID_MEDICO_NO_ENCONTRADO);
-					throw new LogicaNegocioException(Constantes.EXCEPCION_ID_MEDICO_NO_ENCONTRADO);
-				}
-			
-				Long idMedico = Long.parseLong(idMedicoEspecialistaStr);
-				Long idHojaClinica = Long.parseLong(idHojaClinicaStr);
-				
-				hojaClinicaService.asignarMedico(idMedico, idHojaClinica);
-				
-				Dispatcher.ir(getServletContext(), request, response, "/ConsultaServlet");
-				
-			}catch(LogicaNegocioException ex){
-				ex.printStackTrace();
-				Dispatcher.ir(getServletContext(), request, response, "/ConsultaServlet");
-				return;
+			if(inputTextUtil.estaVacio(idHojaClinicaStr)){
+				request.setAttribute("error", Constantes.EXCEPCION_ID_HOJA_CLINICA_NO_ENCONTRADO);
+				throw new LogicaNegocioException(Constantes.EXCEPCION_ID_HOJA_CLINICA_NO_ENCONTRADO);
 			}
-
+			
+			if(inputTextUtil.estaVacio(idMedicoEspecialistaStr)){
+				request.setAttribute("error", Constantes.EXCEPCION_ID_MEDICO_NO_ENCONTRADO);
+				throw new LogicaNegocioException(Constantes.EXCEPCION_ID_MEDICO_NO_ENCONTRADO);
+			}
+		
+			Long idMedico = Long.parseLong(idMedicoEspecialistaStr);
+			Long idHojaClinica = Long.parseLong(idHojaClinicaStr);
+			
+			hojaClinicaService.asignarMedico(idMedico, idHojaClinica);
+			
+			Dispatcher.ir(getServletContext(), request, response, "/ConsultaServlet");
+				
+		}catch(LogicaNegocioException ex){
+			ex.printStackTrace();
+			Dispatcher.ir(getServletContext(), request, response, "/ConsultaServlet");
+			return;
+			
 		}catch(Exception ex){
 			ex.printStackTrace();
 			throw new ServletException(ex.getMessage());
@@ -106,6 +100,9 @@ public class HojaClinicaServlet extends HttpServlet {
 	
 	
 	private void ingresarDiagnostico(HttpServletRequest request, HttpServletResponse response) throws ServletException{
+		
+		String ruta="/ConsultaServlet";
+		
 		try{
 			
 			boolean error=false;
@@ -114,47 +111,44 @@ public class HojaClinicaServlet extends HttpServlet {
 			String diagnostico= inputTextUtil.limpiar(request.getParameter("tratamiento"));
 			String encamarStr= inputTextUtil.limpiar(request.getParameter("encamar"));
 			
-			try{
-				
-				if(inputTextUtil.estaVacio(idHojaClinicaStr)){
-					request.setAttribute("error", Constantes.EXCEPCION_ID_HOJA_CLINICA_NO_ENCONTRADO);
-					throw new LogicaNegocioException(Constantes.EXCEPCION_ID_HOJA_CLINICA_NO_ENCONTRADO);
-				}
-				
-				if(inputTextUtil.estaVacio(tratamiento)){
-					request.setAttribute("error-tratamiento", Constantes.MSJ_DEBE_INGRESAR_VALOR);
-					error=true;
-				}
-				
-				if(inputTextUtil.estaVacio(diagnostico)){
-					request.setAttribute("error-diagnostico", Constantes.MSJ_DEBE_INGRESAR_VALOR);
-					error=true;
-				}
-				
-				if(inputTextUtil.estaVacio(encamarStr)){
-					request.setAttribute("error-encamar", Constantes.MSJ_DEBE_INGRESAR_VALOR);
-					error=true;
-				}
-				
-				if(error){
-					request.setAttribute("idHojaClinica",idHojaClinicaStr);
-					request.setAttribute("errores_diagnostico",true);
-					Dispatcher.ir(getServletContext(), request, response, "/ConsultaServlet");
-					return;
-				}
-				request.setAttribute("errores_diagnostico",false);
-			
-				Long idHojaClinica = Long.parseLong(idHojaClinicaStr);
-				boolean encamar= Boolean.parseBoolean(encamarStr);
-		
-				hojaClinicaService.ingresarDiagnostico(idHojaClinica, diagnostico, tratamiento, encamar);
-				Dispatcher.ir(getServletContext(), request, response, "/ConsultaServlet");
-				
-			}catch(LogicaNegocioException ex){
-				ex.printStackTrace();
-				request.setAttribute("error",ex.getMessage());
-				Dispatcher.ir(getServletContext(), request, response, "/ConsultaServlet");
+			if(inputTextUtil.estaVacio(idHojaClinicaStr)){
+				request.setAttribute("error", Constantes.EXCEPCION_ID_HOJA_CLINICA_NO_ENCONTRADO);
+				throw new LogicaNegocioException(Constantes.EXCEPCION_ID_HOJA_CLINICA_NO_ENCONTRADO);
 			}
+			
+			if(inputTextUtil.estaVacio(tratamiento)){
+				request.setAttribute("error_tratamiento", Constantes.MSJ_DEBE_INGRESAR_VALOR);
+				error=true;
+			}
+			
+			if(inputTextUtil.estaVacio(diagnostico)){
+				request.setAttribute("error_diagnostico", Constantes.MSJ_DEBE_INGRESAR_VALOR);
+				error=true;
+			}
+			
+			if(inputTextUtil.estaVacio(encamarStr)){
+				request.setAttribute("error_encamar", Constantes.MSJ_DEBE_INGRESAR_VALOR);
+				error=true;
+			}
+			
+			if(error){
+				request.setAttribute("idHojaClinica",idHojaClinicaStr);
+				request.setAttribute("errores_en_diagnostico",true);
+				Dispatcher.ir(getServletContext(), request, response, ruta);
+				return;
+			}
+			request.setAttribute("errores_en_diagnostico",false);
+		
+			Long idHojaClinica = Long.parseLong(idHojaClinicaStr);
+			boolean encamar= Boolean.parseBoolean(encamarStr);
+	
+			hojaClinicaService.ingresarDiagnostico(idHojaClinica, diagnostico, tratamiento, encamar);
+			Dispatcher.ir(getServletContext(), request, response, ruta);
+				
+		}catch(LogicaNegocioException ex){
+			ex.printStackTrace();
+			request.setAttribute("error",ex.getMessage());
+			Dispatcher.ir(getServletContext(), request, response, ruta);
 		
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -163,32 +157,29 @@ public class HojaClinicaServlet extends HttpServlet {
 	}
 	
 	
-	
 	private void darAlta(HttpServletRequest request, HttpServletResponse response) throws ServletException{
+		String ruta="/ConsultaServlet";
+		
 		try{
 	
 			String idHojaClinicaStr= inputTextUtil.limpiar(request.getParameter("idHojaClinica"));
 			
-			try{
-				
-				if(inputTextUtil.estaVacio(idHojaClinicaStr)){
-					request.setAttribute("error", Constantes.EXCEPCION_ID_HOJA_CLINICA_NO_ENCONTRADO);
-					throw new LogicaNegocioException(Constantes.EXCEPCION_ID_HOJA_CLINICA_NO_ENCONTRADO);
-				}
-				
-				Date fechaAlta = new Date();
-				Long idHojaClinica = Long.parseLong(idHojaClinicaStr);
-				hojaClinicaService.darAlta(idHojaClinica,fechaAlta);
-				
-				Dispatcher.ir(getServletContext(), request, response, "/ConsultaServlet");
-			
-			
-			}catch(LogicaNegocioException ex){
-				ex.printStackTrace();
-				request.setAttribute("error",ex.getMessage());
-				Dispatcher.ir(getServletContext(), request, response, "/ConsultaServlet");
+			if(inputTextUtil.estaVacio(idHojaClinicaStr)){
+				request.setAttribute("error", Constantes.EXCEPCION_ID_HOJA_CLINICA_NO_ENCONTRADO);
+				throw new LogicaNegocioException(Constantes.EXCEPCION_ID_HOJA_CLINICA_NO_ENCONTRADO);
 			}
 			
+			Date fechaAlta = new Date();
+			Long idHojaClinica = Long.parseLong(idHojaClinicaStr);
+			hojaClinicaService.darAlta(idHojaClinica,fechaAlta);
+			
+			Dispatcher.ir(getServletContext(), request, response, ruta);
+			
+		}catch(LogicaNegocioException ex){
+			ex.printStackTrace();
+			request.setAttribute("error",ex.getMessage());
+			Dispatcher.ir(getServletContext(), request, response, ruta);
+		
 		}catch(Exception ex){
 			ex.printStackTrace();
 			throw new ServletException(ex.getMessage());
@@ -228,18 +219,17 @@ public class HojaClinicaServlet extends HttpServlet {
 			Long numAsegurado = Long.parseLong(numSeguro);
 			Date fechaIngreso = new Date();
 
-			try{
-				Medico medicoAsignado= hojaClinicaService.nuevaHojaClinica(numAsegurado, fechaIngreso,sintomas);
-				
-				request.setAttribute("nombreMedicoAsignado", medicoAsignado.getNombre());
-				request.setAttribute("hojaClinicaCreada", "ok");
-				Dispatcher.ir(getServletContext(), request, response, ruta);
+			Medico medicoAsignado= hojaClinicaService.nuevaHojaClinica(numAsegurado, fechaIngreso,sintomas);
 			
-			}catch(LogicaNegocioException ex){	
-				request.setAttribute("error",ex.getMessage());
-				Dispatcher.ir(getServletContext(), request, response, ruta);
-				return;
-			}
+			request.setAttribute("nombreMedicoAsignado", medicoAsignado.getNombre());
+			request.setAttribute("hojaClinicaCreada", "ok");
+			Dispatcher.ir(getServletContext(), request, response, ruta);
+			
+		}catch(LogicaNegocioException ex){	
+			request.setAttribute("error",ex.getMessage());
+			Dispatcher.ir(getServletContext(), request, response, ruta);
+			return;
+			
 		}catch(Exception ex){
 			ex.printStackTrace();
 			throw new ServletException(ex.getMessage());

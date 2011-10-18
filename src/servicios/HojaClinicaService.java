@@ -20,6 +20,7 @@ public class HojaClinicaService {
 	public AseguradoDAO aseguradoDAO = new AseguradoDAO();
 	public MedicoDAO medicoDAO = new MedicoDAO();
 
+	@SuppressWarnings("unchecked")
 	public Medico nuevaHojaClinica(Long numAsegurado, Date fechaIngreso,String sintomas) throws Exception {
 
 		Asegurado asegurado = aseguradoDAO.traerPorNumeroAsegurado(numAsegurado);
@@ -28,7 +29,8 @@ public class HojaClinicaService {
 			throw new LogicaNegocioException(Constantes.EXCEPCION_ASEGURADO_NO_ENCONTRADO);
 		}
 		
-		List<Medico> listaMedicos = medicoDAO.list();
+		List<Medico> listaMedicos = medicoDAO.traerPorEspecialidad(Constantes.ID_ESPEC_MEDICINA_GENERAL);
+		
 		Medico medicoMenorCarga = (Medico)Collections.min(listaMedicos);
 		
 		HojaClinica nuevaHojaClinica = new HojaClinica();
@@ -37,7 +39,7 @@ public class HojaClinicaService {
 		nuevaHojaClinica.setAsegurado(asegurado);
 		nuevaHojaClinica.setMedico(medicoMenorCarga);
 		
-		hojaClinicaDAO.insertar(nuevaHojaClinica);
+		hojaClinicaDAO.crear(nuevaHojaClinica);
 		
 		return medicoMenorCarga;
 		
@@ -45,7 +47,7 @@ public class HojaClinicaService {
 	
 	public void darAlta(Long idHojaClinica, Date fechaAlta) throws Exception{
 		
-		HojaClinica hojaClinica= hojaClinicaDAO.traer(idHojaClinica);
+		HojaClinica hojaClinica= hojaClinicaDAO.trearPorId(idHojaClinica);
 		
 		if(hojaClinica==null){
 			throw new LogicaNegocioException(Constantes.EXCEPCION_HOJA_CLINICA_NO_ENCONTRADO);
@@ -53,12 +55,12 @@ public class HojaClinicaService {
 		
 		hojaClinica.setAlta(true);
 		hojaClinica.setFechaAlta(fechaAlta);
-		hojaClinicaDAO.guardar(hojaClinica);
+		hojaClinicaDAO.actualizar(hojaClinica);
 	}
 	
 	public void ingresarDiagnostico(Long idHojaClinica, String diagnostico, String tratamiento, boolean encamar) throws Exception{
 		
-		HojaClinica hojaClinica= hojaClinicaDAO.traer(idHojaClinica);
+		HojaClinica hojaClinica= hojaClinicaDAO.trearPorId(idHojaClinica);
 		
 		if(hojaClinica==null){
 			throw new LogicaNegocioException(Constantes.EXCEPCION_HOJA_CLINICA_NO_ENCONTRADO);
@@ -72,13 +74,13 @@ public class HojaClinicaService {
 			hojaClinica.setAlta(false);
 		}
 		
-		hojaClinicaDAO.guardar(hojaClinica);
+		hojaClinicaDAO.actualizar(hojaClinica);
 	}
 
 	public void asignarMedico(Long idMedico, Long idHojaClinica) throws Exception{
 			
-		HojaClinica hojaClinica= hojaClinicaDAO.traer(idHojaClinica);
-		Medico medico= medicoDAO.traer(idMedico);
+		HojaClinica hojaClinica= hojaClinicaDAO.trearPorId(idHojaClinica);
+		Medico medico= medicoDAO.trearPorId(idMedico);
 		
 		if(hojaClinica==null){
 			throw new LogicaNegocioException(Constantes.EXCEPCION_HOJA_CLINICA_NO_ENCONTRADO);
@@ -88,6 +90,6 @@ public class HojaClinicaService {
 			throw new LogicaNegocioException(Constantes.EXCEPCION_MEDICO_NO_ENCONTRADO);
 		}
 		hojaClinica.setMedico(medico);
-		hojaClinicaDAO.guardar(hojaClinica);
+		hojaClinicaDAO.actualizar(hojaClinica);
 	}
 }

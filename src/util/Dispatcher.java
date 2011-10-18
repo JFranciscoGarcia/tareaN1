@@ -11,11 +11,16 @@ import javax.servlet.http.HttpServletResponse;
 public class Dispatcher{
 
 	
-	public static void ir(ServletContext sc, HttpServletRequest request,
-			HttpServletResponse response,String ruta) throws ServletException, IOException{
+	public static void ir(ServletContext sc, HttpServletRequest request,HttpServletResponse response,String ruta){
 		
-		RequestDispatcher rd = sc.getRequestDispatcher(ruta);
-		rd.forward(request, response);
+		try {
+			RequestDispatcher rd = sc.getRequestDispatcher(ruta);
+			rd.forward(request, response);
+			
+		} catch (ServletException e){ 
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-	
 }

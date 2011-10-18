@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ page isELIgnored ="false" %> 
 
 
 
@@ -45,11 +46,6 @@
        
     </div>
     
-    <c:if test="${1==1}">
-    
-    hola
-    </c:if>
-    
     <div class="allContent">
         
         <div id="tip">
@@ -57,6 +53,8 @@
             	<h1>Indicaciones de uso</h1>
             	Existen dos usuarios de prueba en la DB, cuyos n&uacute;meros de seguros y nombre son:
             	<ul>
+            		<li>752 - Dr. Juanito Jones - M. General</li>
+            		<li>123 - Dr. Frank Sinatra - M. General</li>
             		<li>789 - Dr. Gregory House - Cardiolog&iacute;a</li>
             		<li>852 - Dr. Nick Riviera - Endocrinolog&iacute;a</li>
             		<li>741	- Dr. Fox Mulder - Endocrinolog&iacute;a</li>

@@ -20,6 +20,7 @@ import dao.DAO;
 import dao.EspecialidadDAO;
 import entidades.HojaClinica;
 import entidades.Medico;
+import excepciones.LogicaNegocioException;
 
 @WebServlet("/ConsultaServlet")
 public class ConsultaServlet extends HttpServlet {
@@ -48,60 +49,74 @@ public class ConsultaServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void consultarPacientes(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		String numColegiadoStr = null;
-		boolean error=false;
 		
+		try{
+			
+			String numColegiadoStr= traerNumeroColegiado(request, response);
+			
+			if(numColegiadoStr==null){
+				Dispatcher.ir(getServletContext(), request, response,"/consulta.jsp");
+				return;
+			}
+			
+			DAO.getSession().flush();
+			DAO.getSession().clear();
+			int numColegiado = Integer.parseInt(numColegiadoStr);
+			Medico medico = medicoService.traerMedicoPorNumColegiado(numColegiado);
+		
+	
+			if (medico == null) {
+				request.setAttribute("error", Constantes.EXCEPCION_MEDICO_NO_ENCONTRADO);
+				throw new LogicaNegocioException(Constantes.EXCEPCION_MEDICO_NO_ENCONTRADO);
+				
+			} else {
+				
+				List<HojaClinica> listaHojasClinicas = new ArrayList<HojaClinica>(medico.getHojaClinicas());
+				Collections.sort(listaHojasClinicas,new HojaClinicaComparator());
+	
+				request.getSession().setAttribute("listaHojasClinicas", listaHojasClinicas);
+				request.getSession().setAttribute("listaEspecialidades",especialidadDAO.trearTodos());
+				request.getSession().setAttribute("numColegiado",medico.getNum()+"");
+				request.getSession().setAttribute("medico",medico);
+				
+				Dispatcher.ir(getServletContext(), request, response,"/listaPacientes.jsp");
+			}
+		}catch(LogicaNegocioException ex){
+			ex.printStackTrace();
+			Dispatcher.ir(getServletContext(), request, response, "/consulta.jsp");
+			return;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			throw new ServletException(ex.getMessage());
+		}
+	}
+	
+	private String traerNumeroColegiado(HttpServletRequest request, HttpServletResponse response){
 		String accion= (String)request.getParameter("accion");
+		String numColegiadoStr = null;
 		
 		if(accion!=null && accion.equals(Constantes.BTN_CONSULTAR)){
 			numColegiadoStr=  inputTextUtil.limpiar(request.getParameter("numColegiado"));
 			
 			if(inputTextUtil.estaVacio(numColegiadoStr)){
 				request.setAttribute("error-numcolegiado", Constantes.MSJ_DEBE_INGRESAR_NUM_COLEGIADO);
-				error=true;
-			}
-			
-			if(!inputTextUtil.estaVacio(numColegiadoStr)){
+				numColegiadoStr= null;
+				
+			}else{
 				if(!inputTextUtil.esNumero(numColegiadoStr)){
 					request.setAttribute("error-numcolegiado", Constantes.MSJ_NO_ES_NUMERO);
-					error=true;
+					numColegiadoStr= null;
 				}
 			}
 			
-			
 		}else{
-
 			numColegiadoStr= (String)request.getSession().getAttribute("numColegiado");
-		}
-
-		if(error){
-			Dispatcher.ir(getServletContext(), request, response,"/consulta.jsp");
-			return;
-		}
 		
-		DAO.getSession().flush();
-		DAO.getSession().clear();
-		int numColegiado = Integer.parseInt(numColegiadoStr);
-		Medico medico = medicoService.traerMedicoPorNumColegiado(numColegiado);
-	
-
-		if (medico == null) {
-			request.setAttribute("error", Constantes.EXCEPCION_MEDICO_NO_ENCONTRADO);
-			Dispatcher.ir(getServletContext(), request, response,"/consulta.jsp");
-		} else {
-			
-			List<HojaClinica> listaHojasClinicas = new ArrayList<HojaClinica>(medico.getHojaClinicas());
-			Collections.sort(listaHojasClinicas,new HojaClinicaComparator());
-
-			request.getSession().setAttribute("listaHojasClinicas", listaHojasClinicas);
-			request.getSession().setAttribute("listaEspecialidades",especialidadDAO.list());
-			request.getSession().setAttribute("numColegiado",medico.getNum()+"");
-			request.getSession().setAttribute("medico",medico);
-			
-
-			Dispatcher.ir(getServletContext(), request, response,"/listaPacientes.jsp");
 		}
+		return numColegiadoStr;
 	}
 	
 }

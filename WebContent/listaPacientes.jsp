@@ -5,6 +5,9 @@
 <%@ page import="entidades.Medico" %>
 <%@ page import="util.Constantes" %>
 <%@ page import="java.util.*" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -76,14 +79,7 @@
 	  
 	  comprobarErrores();
   });
-  
-  <% 
-  List<HojaClinica> listaHojasClinicas= (List<HojaClinica>)request.getSession().getAttribute("listaHojasClinicas");
-  List<Especialidad> listaEpecialidades=(List<Especialidad>)request.getSession().getAttribute("listaEspecialidades");
-  Medico medico=(Medico)request.getSession().getAttribute("medico");
-  %>
-  
-  
+ 
   function darAlta(idHojaClinica){
 		$('#idHojaClinica_alta').val(idHojaClinica);
 		$('#dialogoDarAlta').dialog('open');
@@ -100,10 +96,10 @@
 	}
   
   function comprobarErrores(){
-	  errores_diagnostico=<%=(Boolean)request.getAttribute("errores_diagnostico")%>;
+	  errores_diagnostico="${errores_en_diagnostico}";
 	  
 	  if(errores_diagnostico){
-	 	 idHojaClinica=<%=request.getAttribute("idHojaClinica")%>;
+	 	 idHojaClinica="${idHojaClinica}";
 	 	$('#idHojaClinica_diagnostico').val(idHojaClinica);
 		$('#dialogoDiagnostico').dialog('open');
 	  }
@@ -151,18 +147,18 @@
 				<th>(*) Diagnostico:</th>
 				<td>
 					<textarea id="diagnostico" name="diagnostico"></textarea>
-					<% if(request.getAttribute("error-diagnostico")!=null){%>
-								<br/><span class="msj-campo-error"><%=request.getAttribute("error-diagnostico")%></span>
-					<%}%>
+					<c:if test="${not empty error_diagnostico}">
+						<br/><span class="msj-campo-error">${error_diagnostico}</span>
+					</c:if>
 				</td>
 			</tr>
 			<tr>
 				<th>(*) Tratamiento:</th>
 				<td>
 					<textarea id="tratamiento" name="tratamiento"></textarea>
-					<% if(request.getAttribute("error-tratamiento")!=null){%>
-								<br/><span class="msj-campo-error"><%=request.getAttribute("error-tratamiento")%></span>
-					<%}%>
+					<c:if test="${not empty error_tratamiento}">
+						<br/><span class="msj-campo-error">${error_tratamiento}</span>
+					</c:if>
 				</td>
 			</tr>
 			<tr>
@@ -170,10 +166,9 @@
 				<td>
 					<input type="checkbox" name="encamar" value="true"/>Si
 					<input type="checkbox" name="encamar" value="false"/>No
-					
-					<% if(request.getAttribute("error-encamar")!=null){%>
-						<br/><span class="msj-campo-error"><%=request.getAttribute("error-encamar")%></span>
-					<%}%>
+					<c:if test="${not empty error_encamar}">
+						<br/><span class="msj-campo-error">${error_encamar}</span>
+					</c:if>
 				</td>
 			</tr>
 		</table>
@@ -193,9 +188,9 @@
 				<th>Especialidad:</th>
 				<td>
 					<select id="comboEspecialidades" onchange="cargarMedicoEspecialista($('#comboEspecialidades').val());">
-					<%for(Especialidad especialidad: listaEpecialidades){%>
-						<option value="<%=especialidad.getIdEspecialidad()%>"><%=especialidad.getNombre()%></option>
-					<%} %>
+						<c:forEach items="${listaEspecialidades}" var="especialidad">
+							<option value="${especialidad.idEspecialidad}">${especialidad.nombre}</option>
+						</c:forEach>
 					</select>
 				</td>
 			</tr>
@@ -243,6 +238,8 @@
             	<h1>Indicaciones de uso</h1>
             	Existen dos usuarios de prueba en la DB, cuyos n&uacute;meros de seguros y nombre son:
             	<ul>
+            		<li>752 - Dr. Juanito Jones - M. General</li>
+            		<li>123 - Dr. Frank Sinatra - M. General</li>
             		<li>789 - Dr. Gregory House - Cardiolog&iacute;a</li>
             		<li>852 - Dr. Nick Riviera - Endocrinolog&iacute;a</li>
             		<li>741	- Dr. Fox Mulder - Endocrinolog&iacute;a</li>
@@ -251,11 +248,10 @@
         </div>
          
         <div id="mainContent">
-        	<h1>Lista de Pacientes - <%=medico.getNombre()%></h1>
-            <% if(request.getAttribute("error")!=null){%>
-			<div class="msj-error"><%=request.getAttribute("error")%></div>
-			<%}%>
-           
+        	<h1>Lista de Pacientes - ${medico.nombre}</h1>
+            <c:if test="${not empty error}">
+				<div class="msj-error">${error}</div>
+			</c:if>
 			<table class="tabla-datos">
 				<tr>
 					<th>Fecha de ingreso</th>
@@ -266,24 +262,38 @@
 					<th class="acciones">Acciones</th>
 				</tr>
 		
-				<%for(HojaClinica hojaClinica:listaHojasClinicas){ %>
-				<tr>
-					<td><%=FechaUtil.formatearAFechaClinicaIngreso(hojaClinica.getFechaIngreso())%></td>
-					<td><%=hojaClinica.getAsegurado().getNumSeguro()%></td>
-					<td><%=hojaClinica.getAsegurado().getNombre()%></td>
-					<td><%=hojaClinica.getSintomas()%></td>
-					<% if(hojaClinica.getAlta()!=null){ %>
-					<td><%= (hojaClinica.getAlta()==true)?FechaUtil.formatearAFechaClinicaAlta(hojaClinica.getFechaAlta()):"NO" %></td>
-					<%}else{ %>
-					<td>-</td>
-					<%}%>
-					<td class="acciones">
-						<a onclick="realizarDiagnostico(<%=hojaClinica.getIdHojaClinica()%>);"><%=Constantes.BTN_INGRESAR_DIAGNOSTICO%></a><br/>
-						<a onclick="asignarMedico(<%=hojaClinica.getIdHojaClinica()%>);"><%=Constantes.BTN_ASIGNAR_MEDICO%></a><br/>
-						<a onclick="darAlta(<%=hojaClinica.getIdHojaClinica()%>);"><%=Constantes.BTN_DAR_ALTA%></a>
-					</td>
-				</tr>
-				<%} %>
+				<c:if test="${fn:length(listaHojasClinicas) > 0}">
+					<c:forEach items="${listaHojasClinicas}" var="hoja" >
+						<tr>
+							<td><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${hoja.fechaIngreso}" /></td>
+							<td>${hoja.asegurado.numSeguro}</td>
+							<td>${hoja.asegurado.nombre}</td>
+							<td>${hoja.sintomas}</td>
+							<c:choose>
+								<c:when test="${not empty hoja.alta }">
+									<td>
+										<c:choose>
+											<c:when test="${hoja.alta==true}">
+											<fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${hoja.fechaAlta}" />
+											</c:when>
+											<c:otherwise>
+												NO
+											</c:otherwise>
+										</c:choose>
+									</td>
+								</c:when>
+								<c:otherwise>
+									<td>-</td>
+								</c:otherwise>
+							</c:choose>
+							<td class="acciones">
+								<a onclick="realizarDiagnostico(${hoja.idHojaClinica});"><%=Constantes.BTN_INGRESAR_DIAGNOSTICO%></a><br/>
+								<a onclick="asignarMedico(${hoja.idHojaClinica});"><%=Constantes.BTN_ASIGNAR_MEDICO%></a><br/>
+								<a onclick="darAlta(${hoja.idHojaClinica});"><%=Constantes.BTN_DAR_ALTA%></a>
+							</td>
+						</tr>
+					</c:forEach>
+				</c:if>
 			</table>
         </div>
     </div>
